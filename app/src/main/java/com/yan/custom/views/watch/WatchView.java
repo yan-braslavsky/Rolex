@@ -52,7 +52,6 @@ public class WatchView extends View {
     private BaseActor mTenOClockActor;
     private BaseActor mElevenOClockActor;
 
-
     public WatchView(Context context) {
         super(context);
         init();
@@ -74,7 +73,7 @@ public class WatchView extends View {
         mActorCanvasRenderer = new ActorCanvasRenderer();
         createActors();
         addActorsToView();
-        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor);
+        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor,mWindingWheel);
     }
 
     private void createActors() {
@@ -144,22 +143,27 @@ public class WatchView extends View {
         mWatchTouchProcessor.setViewSize(w, h);
 
         //Hours arrow
-        mHoursArrowActor.setTranslation(-mHoursArrowActor.getBitmap().getWidth() / 2, -mHoursArrowActor.getBitmap().getHeight());
+        mHoursArrowActor.setTranslation(-mHoursArrowActor.getBitmap().getWidth() / 2, -(mHoursArrowActor.getBitmap().getHeight() * 0.9f));
         float left = mViewCenterPoint.x + mHoursArrowActor.getTranslation().x;
         float top = mViewCenterPoint.y + mHoursArrowActor.getTranslation().y;
         mHoursArrowActor.setBounds(left, top, left + mHoursArrowActor.getBitmap().getWidth(), top + mHoursArrowActor.getBitmap().getHeight());
 
         //Minutes arrow
-        mMinutesArrowActor.setTranslation(-mMinutesArrowActor.getBitmap().getWidth() / 2, -mMinutesArrowActor.getBitmap().getHeight());
+        mMinutesArrowActor.setTranslation(-mMinutesArrowActor.getBitmap().getWidth() / 2, -(mMinutesArrowActor.getBitmap().getHeight() * 0.9f));
 
         //Seconds arrow
-        mSecondsArrowActor.setTranslation(-mSecondsArrowActor.getBitmap().getWidth() / 2, -mSecondsArrowActor.getBitmap().getHeight());
+        mSecondsArrowActor.setTranslation(-mSecondsArrowActor.getBitmap().getWidth() / 2, -(mSecondsArrowActor.getBitmap().getHeight() * 0.9f));
 
         //strap
         mWatchStrapActor.setTranslation(-mWatchStrapActor.getBitmap().getWidth() / 2, -mWatchStrapActor.getBitmap().getHeight() / 2);
 
         //wheel
         mWindingWheel.setTranslation(-mWindingWheel.getBitmap().getWidth() / 2, -mWindingWheel.getBitmap().getHeight() / 2);
+        float boundingBoxWidth = getWidth() * 0.3f;
+        float boundingBoxHeight = getHeight() * 0.2f;
+        left =  mViewCenterPoint.x  - (boundingBoxWidth/2);
+        top =   mViewCenterPoint.y + mWindingWheel.getTranslation().y;
+        mWindingWheel.setBounds(left, top - (boundingBoxHeight/2), left + (boundingBoxWidth/2), top + (boundingBoxHeight/2));
 
         //screen
         mWatchScreenActor.setTranslation(-mWatchScreenActor.getBitmap().getWidth() / 2, -mWatchScreenActor.getBitmap().getHeight() / 2);
@@ -171,7 +175,7 @@ public class WatchView extends View {
 
     private void initSmallTimeMarkers() {
         //big time markers
-        float smallHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - mOneOClockActor.getBitmap().getHeight());
+        float smallHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - (mOneOClockActor.getBitmap().getHeight() * 1.2f));
         float smallHourMarkerXTranslation = -mOneOClockActor.getBitmap().getWidth() / 2f;
         float oneHourRotation = 30f;
 
@@ -212,7 +216,7 @@ public class WatchView extends View {
 
     private void initBigTimeMarkers() {
         //big time markers
-        float bigHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - mSixOClockActor.getBitmap().getHeight() / 2f);
+        float bigHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - (mSixOClockActor.getBitmap().getHeight() * 1.2f) / 2f);
         float bigHourMarkerXTranslation = -mSixOClockActor.getBitmap().getWidth() / 2f;
 
         //twelve

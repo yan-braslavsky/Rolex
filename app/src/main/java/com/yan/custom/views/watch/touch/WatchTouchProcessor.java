@@ -3,7 +3,6 @@ package com.yan.custom.views.watch.touch;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 
-import com.yan.custom.views.watch.actors.BaseActor;
 import com.yan.custom.views.watch.actors.IActor;
 import com.yan.custom.views.watch.math.WatchMathUtils;
 
@@ -12,14 +11,16 @@ import com.yan.custom.views.watch.math.WatchMathUtils;
  */
 public class WatchTouchProcessor {
 
-    private BaseActor mHourArrowActor;
+    private IActor mHourArrowActor;
     private PointF mViewSize;
     private PointF mCacheTouchPoint;
     private PointF mViewOrigin;
     private IActor mCurrentDraggedActor;
+    private IActor mWindingWheel;
 
-    public WatchTouchProcessor(BaseActor hourArrowActor) {
-        mHourArrowActor = hourArrowActor;
+    public WatchTouchProcessor(IActor hoursArrowActor, IActor windingWheel) {
+        mHourArrowActor = hoursArrowActor;
+        mWindingWheel = windingWheel;
         mViewSize = new PointF(0, 0);
         mCacheTouchPoint = new PointF();
         mViewOrigin = new PointF();
@@ -59,7 +60,7 @@ public class WatchTouchProcessor {
         if (mCurrentDraggedActor != null) {
             float rotation = getAngle(new PointF(touchX, touchY));
             rotation += 90;
-            mHourArrowActor.setRotation(rotation);
+            mCurrentDraggedActor.setRotation(rotation);
         }
 
     }
@@ -68,6 +69,16 @@ public class WatchTouchProcessor {
         //rotate back like if the touch point was on the original position of the actor
         WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
 
+        if (mWindingWheel.getBoundingRectangle().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
+            mCurrentDraggedActor = mWindingWheel;
+
+            //TODO : extract to concrete handler ?
+            float rotation = getAngle(new PointF(touchX, touchY));
+            rotation += 90;
+            mWindingWheel.setRotation(rotation);
+            return;
+        }
+
         if (mHourArrowActor.getBoundingRectangle().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
             mCurrentDraggedActor = mHourArrowActor;
 
@@ -75,6 +86,7 @@ public class WatchTouchProcessor {
             float rotation = getAngle(new PointF(touchX, touchY));
             rotation += 90;
             mHourArrowActor.setRotation(rotation);
+            return;
         }
     }
 
