@@ -12,6 +12,7 @@ import com.yan.custom.views.R;
 import com.yan.custom.views.watch.actors.BaseActor;
 import com.yan.custom.views.watch.actors.IActor;
 import com.yan.custom.views.watch.physics.Box2DCollider;
+import com.yan.custom.views.watch.physics.Ring2DCollider;
 import com.yan.custom.views.watch.renderer.ActorCanvasRenderer;
 import com.yan.custom.views.watch.touch.WatchTouchProcessor;
 
@@ -74,7 +75,7 @@ public class WatchView extends View {
         mActorCanvasRenderer = new ActorCanvasRenderer();
         createActors();
         addActorsToView();
-        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor,mWindingWheel);
+        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor, mWindingWheel);
     }
 
     private void createActors() {
@@ -160,11 +161,9 @@ public class WatchView extends View {
 
         //wheel
         mWindingWheel.setTranslation(-mWindingWheel.getBitmap().getWidth() / 2, -mWindingWheel.getBitmap().getHeight() / 2);
-        float boundingBoxWidth = getWidth() * 0.3f;
-        float boundingBoxHeight = getHeight() * 0.2f;
-        left =  mViewCenterPoint.x  - (boundingBoxWidth/2);
-        top =   mViewCenterPoint.y + mWindingWheel.getTranslation().y;
-        mWindingWheel.setCollider(new Box2DCollider(left, top - (boundingBoxHeight / 2), left + (boundingBoxWidth / 2), top + (boundingBoxHeight / 2)));
+        float ringWidth = getWidth() * 0.1f;
+        float windingWheelHalfWidth = mWindingWheel.getBitmap().getWidth() / 2;
+        mWindingWheel.setCollider(new Ring2DCollider(mViewCenterPoint, windingWheelHalfWidth - ringWidth, windingWheelHalfWidth /*+ ringWidth*/));
 
         //screen
         mWatchScreenActor.setTranslation(-mWatchScreenActor.getBitmap().getWidth() / 2, -mWatchScreenActor.getBitmap().getHeight() / 2);

@@ -66,10 +66,9 @@ public class WatchTouchProcessor {
     }
 
     private void onTouchDown(float touchX, float touchY) {
-        //rotate back like if the touch point was on the original position of the actor
-        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
 
-        if (mWindingWheel.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
+
+        if (mWindingWheel.getCollider().contains(touchX,touchY)) {
             mCurrentDraggedActor = mWindingWheel;
 
             //TODO : extract to concrete handler ?
@@ -78,6 +77,9 @@ public class WatchTouchProcessor {
             mWindingWheel.setRotation(rotation);
             return;
         }
+
+        //rotate back like if the touch point was on the original position of the actor
+        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
 
         if (mHourArrowActor.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
             mCurrentDraggedActor = mHourArrowActor;
