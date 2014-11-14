@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 
 import com.yan.custom.views.watch.actors.BaseActor;
 import com.yan.custom.views.watch.actors.IActor;
+import com.yan.custom.views.watch.math.WatchMathUtils;
 
 /**
  * Created by Yan-Home on 11/14/2014.
@@ -65,7 +66,7 @@ public class WatchTouchProcessor {
 
     private void onTouchDown(float touchX, float touchY) {
         //rotate back like if the touch point was on the original position of the actor
-        rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
+        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
 
         if (mHourArrowActor.getBoundingRectangle().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
             mCurrentDraggedActor = mHourArrowActor;
@@ -92,11 +93,5 @@ public class WatchTouchProcessor {
         mViewOrigin.y = h / 2;
     }
 
-    public static void rotatePointAroundOrigin(PointF point, PointF origin, float angleDegrees) {
-        double angleRadians = Math.toRadians(angleDegrees);
-        double newX = origin.x + (point.x - origin.x) * Math.cos(angleRadians) - (point.y - origin.y) * Math.sin(angleRadians);
-        double newY = origin.y + (point.x - origin.x) * Math.sin(angleRadians) + (point.y - origin.y) * Math.cos(angleRadians);
-        point.x = (float) newX;
-        point.y = (float) newY;
-    }
+
 }

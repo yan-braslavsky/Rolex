@@ -24,11 +24,34 @@ public class WatchView extends View {
     private ActorCanvasRenderer mActorCanvasRenderer;
     private WatchTouchProcessor mWatchTouchProcessor;
     private PointF mViewCenterPoint;
-
-    //Actors
-    private BaseActor mHourArrowActor;
-    private BaseActor mWatchStrapActor;
     private ArrayList<IActor> mActorsList;
+
+    //Background actors
+    private BaseActor mWatchStrapActor;
+    private BaseActor mWindingWheel;
+    private BaseActor mWatchScreenActor;
+
+    //Arrows actors
+    private BaseActor mHoursArrowActor;
+    private BaseActor mMinutesArrowActor;
+    private BaseActor mSecondsArrowActor;
+
+    //Big time actors
+    private BaseActor mTwelweOClockActor;
+    private BaseActor mThreeOClockActor;
+    private BaseActor mSixOClockActor;
+    private BaseActor mNineOClockActor;
+
+    //Small time actors
+    private BaseActor mOneOClockActor;
+    private BaseActor mTwoOClockActor;
+    private BaseActor mFourOClockActor;
+    private BaseActor mFiveOClockActor;
+    private BaseActor mSevenOClockActor;
+    private BaseActor mEightOClockActor;
+    private BaseActor mTenOClockActor;
+    private BaseActor mElevenOClockActor;
+
 
     public WatchView(Context context) {
         super(context);
@@ -49,17 +72,67 @@ public class WatchView extends View {
         mActorsList = new ArrayList<IActor>();
         mViewCenterPoint = new PointF();
         mActorCanvasRenderer = new ActorCanvasRenderer();
-        mHourArrowActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.hour));
-        mWatchTouchProcessor = new WatchTouchProcessor(mHourArrowActor);
-        mWatchStrapActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.strap));
-
+        createActors();
         addActorsToView();
+        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor);
+    }
+
+    private void createActors() {
+
+        mWatchStrapActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.strap));
+        mWindingWheel = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.wheel));
+        mWatchScreenActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.screen));
+
+        //arrows
+        mHoursArrowActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.hour));
+        mMinutesArrowActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.min));
+        mSecondsArrowActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.sek));
+
+        //time
+        //big times
+        mTwelweOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
+        mThreeOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
+        mSixOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
+        mNineOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
+
+        //small times
+        mOneOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mTwoOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mFourOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mFiveOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mSevenOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mEightOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mTenOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        mElevenOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
     }
 
     private void addActorsToView() {
         //The last one added will be the first one visible
         mActorsList.add(mWatchStrapActor);
-        mActorsList.add(mHourArrowActor);
+        mActorsList.add(mWindingWheel);
+        mActorsList.add(mWatchScreenActor);
+
+        //big time markers
+        mActorsList.add(mTwelweOClockActor);
+        mActorsList.add(mThreeOClockActor);
+        mActorsList.add(mSixOClockActor);
+        mActorsList.add(mNineOClockActor);
+
+        //small time markers
+        mActorsList.add(mOneOClockActor);
+        mActorsList.add(mTwoOClockActor);
+        mActorsList.add(mFourOClockActor);
+        mActorsList.add(mFiveOClockActor);
+        mActorsList.add(mSevenOClockActor);
+        mActorsList.add(mEightOClockActor);
+        mActorsList.add(mTenOClockActor);
+        mActorsList.add(mElevenOClockActor);
+
+        //arrows
+        mActorsList.add(mHoursArrowActor);
+        mActorsList.add(mMinutesArrowActor);
+        mActorsList.add(mSecondsArrowActor);
+
     }
 
     @Override
@@ -70,17 +143,93 @@ public class WatchView extends View {
         mViewCenterPoint.y = h / 2;
         mWatchTouchProcessor.setViewSize(w, h);
 
-        //TODO : Change actor sizes
+        //Hours arrow
+        mHoursArrowActor.setTranslation(-mHoursArrowActor.getBitmap().getWidth() / 2, -mHoursArrowActor.getBitmap().getHeight());
+        float left = mViewCenterPoint.x + mHoursArrowActor.getTranslation().x;
+        float top = mViewCenterPoint.y + mHoursArrowActor.getTranslation().y;
+        mHoursArrowActor.setBounds(left, top, left + mHoursArrowActor.getBitmap().getWidth(), top + mHoursArrowActor.getBitmap().getHeight());
 
-        //Arrow
-        mHourArrowActor.setTranslation(-mHourArrowActor.getBitmap().getWidth() / 2, -mHourArrowActor.getBitmap().getHeight());
-        float left = mViewCenterPoint.x + mHourArrowActor.getTranslation().x;
-        float top = mViewCenterPoint.y + mHourArrowActor.getTranslation().y;
-        mHourArrowActor.setBounds(left, top, left + mHourArrowActor.getBitmap().getWidth(), top + mHourArrowActor.getBitmap().getHeight());
+        //Minutes arrow
+        mMinutesArrowActor.setTranslation(-mMinutesArrowActor.getBitmap().getWidth() / 2, -mMinutesArrowActor.getBitmap().getHeight());
+
+        //Seconds arrow
+        mSecondsArrowActor.setTranslation(-mSecondsArrowActor.getBitmap().getWidth() / 2, -mSecondsArrowActor.getBitmap().getHeight());
 
         //strap
         mWatchStrapActor.setTranslation(-mWatchStrapActor.getBitmap().getWidth() / 2, -mWatchStrapActor.getBitmap().getHeight() / 2);
 
+        //wheel
+        mWindingWheel.setTranslation(-mWindingWheel.getBitmap().getWidth() / 2, -mWindingWheel.getBitmap().getHeight() / 2);
+
+        //screen
+        mWatchScreenActor.setTranslation(-mWatchScreenActor.getBitmap().getWidth() / 2, -mWatchScreenActor.getBitmap().getHeight() / 2);
+
+        initBigTimeMarkers();
+        initSmallTimeMarkers();
+
+    }
+
+    private void initSmallTimeMarkers() {
+        //big time markers
+        float smallHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - mOneOClockActor.getBitmap().getHeight());
+        float smallHourMarkerXTranslation = -mOneOClockActor.getBitmap().getWidth() / 2f;
+        float oneHourRotation = 30f;
+
+        //one
+        mOneOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mOneOClockActor.setRotation(oneHourRotation * 1);
+
+        //two
+        mTwoOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mTwoOClockActor.setRotation(oneHourRotation * 2);
+
+        //four
+        mFourOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mFourOClockActor.setRotation(oneHourRotation * 4);
+
+        //five
+        mFiveOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mFiveOClockActor.setRotation(oneHourRotation * 5);
+
+        //seven
+        mSevenOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mSevenOClockActor.setRotation(oneHourRotation * 7);
+
+        //eight
+        mEightOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mEightOClockActor.setRotation(oneHourRotation * 8);
+
+        //ten
+        mTenOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mTenOClockActor.setRotation(oneHourRotation * 10);
+
+        //eleven
+        mElevenOClockActor.setTranslation(smallHourMarkerXTranslation, smallHourMarkerYTranslation);
+        mElevenOClockActor.setRotation(oneHourRotation * 11);
+
+    }
+
+
+    private void initBigTimeMarkers() {
+        //big time markers
+        float bigHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - mSixOClockActor.getBitmap().getHeight() / 2f);
+        float bigHourMarkerXTranslation = -mSixOClockActor.getBitmap().getWidth() / 2f;
+
+        //twelve
+        mTwelweOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);
+        mTwelweOClockActor.setRotation(0);
+
+        //three
+        mThreeOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);
+        mThreeOClockActor.setRotation(90);
+
+        //Six
+        mSixOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);
+        mSixOClockActor.setRotation(180);
+
+        //Nine
+        mNineOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);
+        mNineOClockActor.setRotation(270);
     }
 
     @Override
@@ -89,7 +238,6 @@ public class WatchView extends View {
 
         for (IActor actor : mActorsList) {
             mActorCanvasRenderer.renderActorOnCanvas(actor, canvas);
-//            mActorCanvasRenderer.renderActorOnCanvas(mHourArrowActor, canvas);
         }
 
     }
