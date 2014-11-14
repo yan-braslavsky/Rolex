@@ -2,24 +2,24 @@ package com.yan.custom.views.watch.actors;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 /**
  * Created by Yan-Home on 11/14/2014.
  */
-public class ArrowActor implements IActor {
+public class BaseActor implements IActor {
 
     private Bitmap mBitmap;
     private float mRotation;
     private PointF mTranslation;
+    private RectF mBoundingRectangle;
 
 
-    public ArrowActor(Bitmap bmp) {
+    public BaseActor(Bitmap bmp) {
         mBitmap = bmp;
         mRotation = 0;
         mTranslation = new PointF(0, 0);
-
-        //TODO : remove
-        setTranslation(-mBitmap.getWidth() / 2, -mBitmap.getHeight());
+        mBoundingRectangle = new RectF();
     }
 
     @Override
@@ -47,5 +47,18 @@ public class ArrowActor implements IActor {
     @Override
     public void setRotation(float rotation) {
         mRotation = rotation;
+    }
+
+    @Override
+    public RectF getBoundingRectangle() {
+        return mBoundingRectangle;
+    }
+
+    @Override
+    public void setBounds( float left,float top, float right, float bottom) {
+        mBoundingRectangle.left = left;
+        mBoundingRectangle.top = top;
+        mBoundingRectangle.right = right;
+        mBoundingRectangle.bottom = bottom;
     }
 }

@@ -3,47 +3,100 @@ package com.yan.custom.views.watch.touch;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 
-import com.yan.custom.views.watch.actors.ArrowActor;
+import com.yan.custom.views.watch.actors.BaseActor;
+import com.yan.custom.views.watch.actors.IActor;
 
 /**
  * Created by Yan-Home on 11/14/2014.
  */
 public class WatchTouchProcessor {
 
-    private ArrowActor mHourArrowActor;
+    private BaseActor mHourArrowActor;
     private PointF mViewSize;
+    private PointF mCacheTouchPoint;
+    private PointF mViewOrigin;
+    private IActor mCurrentDraggedActor;
 
-    public WatchTouchProcessor(ArrowActor hourArrowActor) {
+    public WatchTouchProcessor(BaseActor hourArrowActor) {
         mHourArrowActor = hourArrowActor;
         mViewSize = new PointF(0, 0);
+        mCacheTouchPoint = new PointF();
+        mViewOrigin = new PointF();
     }
 
 
     public void processTouch(MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
-        float rotation = (float) getAngle(new PointF(touchX, touchY));
-        rotation += 90;
 
-        mHourArrowActor.setRotation(rotation);
+        mCacheTouchPoint.x = touchX;
+        mCacheTouchPoint.y = touchY;
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                onTouchDown(touchX, touchY);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                onTouchMove(touchX, touchY);
+                break;
+            case MotionEvent.ACTION_UP:
+                onTouchUp(touchX, touchY);
+                break;
+        }
+
+
     }
 
-    public double getAngle(PointF screenPoint) {
+    private void onTouchUp(float touchX, float touchY) {
+        //TODO:
+        mCurrentDraggedActor = null;
+    }
+
+    private void onTouchMove(float touchX, float touchY) {
+        //TODO:
+
+        if (mCurrentDraggedActor != null) {
+            float rotation = getAngle(new PointF(touchX, touchY));
+            rotation += 90;
+            mHourArrowActor.setRotation(rotation);
+        }
+
+    }
+
+    private void onTouchDown(float touchX, float touchY) {
+        //rotate back like if the touch point was on the original position of the actor
+        rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
+
+        if (mHourArrowActor.getBoundingRectangle().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
+            mCurrentDraggedActor = mHourArrowActor;
+
+            //TODO : extract to concrete handler ?
+            float rotation = getAngle(new PointF(touchX, touchY));
+            rotation += 90;
+            mHourArrowActor.setRotation(rotation);
+        }
+    }
+
+    public float getAngle(PointF screenPoint) {
         double dx = screenPoint.x - (mViewSize.x / 2);
         double dy = -(screenPoint.y - (mViewSize.y / 2));
-
         double inRads = Math.atan2(dy, dx);
-
-        if (inRads < 0)
-            inRads = Math.abs(inRads);
-        else
-            inRads = 2 * Math.PI - inRads;
-
-        return Math.toDegrees(inRads);
+        inRads = (inRads < 0) ? Math.abs(inRads) : (2 * Math.PI - inRads);
+        return (float) (Math.toDegrees(inRads));
     }
 
     public void setViewSize(int w, int h) {
         mViewSize.x = w;
         mViewSize.y = h;
+        mViewOrigin.x = w / 2;
+        mViewOrigin.y = h / 2;
+    }
+
+    public static void rotatePointAroundOrigin(PointF point, PointF origin, float angleDegrees) {
+        double angleRadians = Math.toRadians(angleDegrees);
+        double newX = origin.x + (point.x - origin.x) * Math.cos(angleRadians) - (point.y - origin.y) * Math.sin(angleRadians);
+        double newY = origin.y + (point.x - origin.x) * Math.sin(angleRadians) + (point.y - origin.y) * Math.cos(angleRadians);
+        point.x = (float) newX;
+        point.y = (float) newY;
     }
 }
