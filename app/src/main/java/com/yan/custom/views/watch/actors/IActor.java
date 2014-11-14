@@ -2,7 +2,8 @@ package com.yan.custom.views.watch.actors;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.RectF;
+
+import com.yan.custom.views.watch.physics.ICollider;
 
 /**
  * Created by Yan-Home on 11/14/2014.
@@ -18,7 +19,8 @@ public interface IActor {
 
     void setRotation(float rotation);
 
-    RectF getBoundingRectangle();
+    ICollider getCollider();
 
-    void setBounds(float top, float left, float right, float bottom);
+    void setCollider(ICollider collider);
+
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import com.yan.custom.views.R;
 import com.yan.custom.views.watch.actors.BaseActor;
 import com.yan.custom.views.watch.actors.IActor;
+import com.yan.custom.views.watch.physics.Box2DCollider;
 import com.yan.custom.views.watch.renderer.ActorCanvasRenderer;
 import com.yan.custom.views.watch.touch.WatchTouchProcessor;
 
@@ -27,30 +28,30 @@ public class WatchView extends View {
     private ArrayList<IActor> mActorsList;
 
     //Background actors
-    private BaseActor mWatchStrapActor;
-    private BaseActor mWindingWheel;
-    private BaseActor mWatchScreenActor;
+    private IActor mWatchStrapActor;
+    private IActor mWindingWheel;
+    private IActor mWatchScreenActor;
 
     //Arrows actors
-    private BaseActor mHoursArrowActor;
-    private BaseActor mMinutesArrowActor;
-    private BaseActor mSecondsArrowActor;
+    private IActor mHoursArrowActor;
+    private IActor mMinutesArrowActor;
+    private IActor mSecondsArrowActor;
 
     //Big time actors
-    private BaseActor mTwelweOClockActor;
-    private BaseActor mThreeOClockActor;
-    private BaseActor mSixOClockActor;
-    private BaseActor mNineOClockActor;
+    private IActor mTwelveOClockActor;
+    private IActor mThreeOClockActor;
+    private IActor mSixOClockActor;
+    private IActor mNineOClockActor;
 
     //Small time actors
-    private BaseActor mOneOClockActor;
-    private BaseActor mTwoOClockActor;
-    private BaseActor mFourOClockActor;
-    private BaseActor mFiveOClockActor;
-    private BaseActor mSevenOClockActor;
-    private BaseActor mEightOClockActor;
-    private BaseActor mTenOClockActor;
-    private BaseActor mElevenOClockActor;
+    private IActor mOneOClockActor;
+    private IActor mTwoOClockActor;
+    private IActor mFourOClockActor;
+    private IActor mFiveOClockActor;
+    private IActor mSevenOClockActor;
+    private IActor mEightOClockActor;
+    private IActor mTenOClockActor;
+    private IActor mElevenOClockActor;
 
     public WatchView(Context context) {
         super(context);
@@ -89,7 +90,7 @@ public class WatchView extends View {
 
         //time
         //big times
-        mTwelweOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
+        mTwelveOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
         mThreeOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
         mSixOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
         mNineOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
@@ -112,7 +113,7 @@ public class WatchView extends View {
         mActorsList.add(mWatchScreenActor);
 
         //big time markers
-        mActorsList.add(mTwelweOClockActor);
+        mActorsList.add(mTwelveOClockActor);
         mActorsList.add(mThreeOClockActor);
         mActorsList.add(mSixOClockActor);
         mActorsList.add(mNineOClockActor);
@@ -146,7 +147,7 @@ public class WatchView extends View {
         mHoursArrowActor.setTranslation(-mHoursArrowActor.getBitmap().getWidth() / 2, -(mHoursArrowActor.getBitmap().getHeight() * 0.9f));
         float left = mViewCenterPoint.x + mHoursArrowActor.getTranslation().x;
         float top = mViewCenterPoint.y + mHoursArrowActor.getTranslation().y;
-        mHoursArrowActor.setBounds(left, top, left + mHoursArrowActor.getBitmap().getWidth(), top + mHoursArrowActor.getBitmap().getHeight());
+        mHoursArrowActor.setCollider(new Box2DCollider(left, top, left + mHoursArrowActor.getBitmap().getWidth(), top + mHoursArrowActor.getBitmap().getHeight()));
 
         //Minutes arrow
         mMinutesArrowActor.setTranslation(-mMinutesArrowActor.getBitmap().getWidth() / 2, -(mMinutesArrowActor.getBitmap().getHeight() * 0.9f));
@@ -163,14 +164,13 @@ public class WatchView extends View {
         float boundingBoxHeight = getHeight() * 0.2f;
         left =  mViewCenterPoint.x  - (boundingBoxWidth/2);
         top =   mViewCenterPoint.y + mWindingWheel.getTranslation().y;
-        mWindingWheel.setBounds(left, top - (boundingBoxHeight/2), left + (boundingBoxWidth/2), top + (boundingBoxHeight/2));
+        mWindingWheel.setCollider(new Box2DCollider(left, top - (boundingBoxHeight / 2), left + (boundingBoxWidth / 2), top + (boundingBoxHeight / 2)));
 
         //screen
         mWatchScreenActor.setTranslation(-mWatchScreenActor.getBitmap().getWidth() / 2, -mWatchScreenActor.getBitmap().getHeight() / 2);
 
         initBigTimeMarkers();
         initSmallTimeMarkers();
-
     }
 
     private void initSmallTimeMarkers() {
@@ -220,8 +220,8 @@ public class WatchView extends View {
         float bigHourMarkerXTranslation = -mSixOClockActor.getBitmap().getWidth() / 2f;
 
         //twelve
-        mTwelweOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);
-        mTwelweOClockActor.setRotation(0);
+        mTwelveOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);
+        mTwelveOClockActor.setRotation(0);
 
         //three
         mThreeOClockActor.setTranslation(bigHourMarkerXTranslation, bigHourMarkerYTranslation);

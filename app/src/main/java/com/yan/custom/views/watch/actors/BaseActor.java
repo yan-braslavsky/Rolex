@@ -2,7 +2,8 @@ package com.yan.custom.views.watch.actors;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.RectF;
+
+import com.yan.custom.views.watch.physics.ICollider;
 
 /**
  * Created by Yan-Home on 11/14/2014.
@@ -12,14 +13,12 @@ public class BaseActor implements IActor {
     private Bitmap mBitmap;
     private float mRotation;
     private PointF mTranslation;
-    private RectF mBoundingRectangle;
-
+    private ICollider mCollider;
 
     public BaseActor(Bitmap bmp) {
         mBitmap = bmp;
         mRotation = 0;
         mTranslation = new PointF(0, 0);
-        mBoundingRectangle = new RectF();
     }
 
     @Override
@@ -50,15 +49,13 @@ public class BaseActor implements IActor {
     }
 
     @Override
-    public RectF getBoundingRectangle() {
-        return mBoundingRectangle;
+    public ICollider getCollider() {
+        return mCollider;
     }
 
     @Override
-    public void setBounds( float left,float top, float right, float bottom) {
-        mBoundingRectangle.left = left;
-        mBoundingRectangle.top = top;
-        mBoundingRectangle.right = right;
-        mBoundingRectangle.bottom = bottom;
+    public void setCollider(ICollider collider) {
+        mCollider = collider;
     }
+
 }
