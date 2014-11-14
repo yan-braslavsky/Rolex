@@ -1,4 +1,4 @@
-package watch.custom.yan.watchview;
+package com.yan.custom.views;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package watch.custom.yan.watchview;
+package com.yan.custom.views;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
