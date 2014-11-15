@@ -6,30 +6,25 @@ import android.view.MotionEvent;
 import com.yan.custom.views.watch.actors.IActor;
 import com.yan.custom.views.watch.math.WatchMathUtils;
 
+import java.util.List;
+
 /**
  * Created by Yan-Home on 11/14/2014.
  */
 public class WatchTouchProcessor {
 
-    private IActor mHourArrowActor;
+    private IActor mCurrentDraggedActor;
+    private List<IActor> mTouchableActors;
     private PointF mViewSize;
     private PointF mCacheTouchPoint;
     private PointF mViewOrigin;
-    private IActor mCurrentDraggedActor;
-    private IActor mWindingWheel;
-    private IActor mMinutesArrowActor;
-    private IActor mSecondsArrowActor;
 
-    public WatchTouchProcessor(IActor windingWheel, IActor secondsArrowActor, IActor minutesArrowActor, IActor hoursArrowActor) {
-        mHourArrowActor = hoursArrowActor;
-        mWindingWheel = windingWheel;
-        mViewSize = new PointF(0, 0);
+    public WatchTouchProcessor(List<IActor> touchableActors) {
+        mTouchableActors = touchableActors;
         mCacheTouchPoint = new PointF();
         mViewOrigin = new PointF();
-        mMinutesArrowActor = minutesArrowActor;
-        mSecondsArrowActor = secondsArrowActor;
+        mViewSize = new PointF(0, 0);
     }
-
 
     public void processTouch(MotionEvent event) {
         switch (event.getAction()) {
@@ -58,19 +53,9 @@ public class WatchTouchProcessor {
     }
 
     private void onTouchDown(float touchX, float touchY) {
-
-        //Winding wheel
-        if (processTouchOnActor(touchX, touchY, mWindingWheel)) return;
-
-        //Seconds arrow
-        if (processTouchOnActor(touchX, touchY, mSecondsArrowActor)) return;
-
-        //Minute arrow
-        if (processTouchOnActor(touchX, touchY, mMinutesArrowActor)) return;
-
-        //Hour arrow
-        if (processTouchOnActor(touchX, touchY, mHourArrowActor)) return;
-
+        for (IActor touchableActor : mTouchableActors) {
+            if (processTouchOnActor(touchX, touchY, touchableActor)) break;
+        }
     }
 
     private boolean processTouchOnActor(float touchX, float touchY, IActor arrow) {
