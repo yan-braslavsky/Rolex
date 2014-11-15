@@ -27,6 +27,11 @@ public class BaseActor implements IActor {
     }
 
     @Override
+    public void setBitmap(Bitmap bmp) {
+        mBitmap = bmp;
+    }
+
+    @Override
     public float getRotation() {
         return mRotation;
     }

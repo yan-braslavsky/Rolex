@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class ActorManager {
 
+    private static int TARGET_SIZE = 800;
+
     private List<IActor> mTouchableActors;
     private PointF mViewCenterPoint;
     private ArrayList<IActor> mActorsDisplayList;
@@ -65,18 +67,18 @@ public class ActorManager {
 
     private void createActors() {
 
-        mWatchStrapActor = new BaseActor(BitmapFactory.decodeResource(mResources, R.drawable.strap));
-        mWindingWheel = new BaseActor(BitmapFactory.decodeResource(mResources, R.drawable.wheel));
-        mWatchScreenActor = new BaseActor(BitmapFactory.decodeResource(mResources, R.drawable.screen));
+        mWatchStrapActor = new BaseActor(createBitmap(R.drawable.strap));
+        mWindingWheel = new BaseActor(createBitmap(R.drawable.wheel));
+        mWatchScreenActor = new BaseActor(createBitmap(R.drawable.screen));
 
         //arrows
-        mHoursArrowActor = new BaseActor(BitmapFactory.decodeResource(mResources, R.drawable.hour));
-        mMinutesArrowActor = new BaseActor(BitmapFactory.decodeResource(mResources, R.drawable.min));
-        mSecondsArrowActor = new BaseActor(BitmapFactory.decodeResource(mResources, R.drawable.sek));
+        mHoursArrowActor = new BaseActor(createBitmap(R.drawable.hour));
+        mMinutesArrowActor = new BaseActor(createBitmap(R.drawable.min));
+        mSecondsArrowActor = new BaseActor(createBitmap(R.drawable.sek));
 
         //big times lines
         //we are reusing the same bitmap for all the actors to save memory
-        Bitmap smallLineBmp = BitmapFactory.decodeResource(mResources, R.drawable.b_line);
+        Bitmap smallLineBmp = createBitmap(R.drawable.b_line);
         mTwelveOClockActor = new BaseActor(smallLineBmp);
         mThreeOClockActor = new BaseActor(smallLineBmp);
         mSixOClockActor = new BaseActor(smallLineBmp);
@@ -84,7 +86,7 @@ public class ActorManager {
 
         //small times lines
         //we are reusing the same bitmap for all the actors to save memory
-        Bitmap bigLineBmp = BitmapFactory.decodeResource(mResources, R.drawable.s_line);
+        Bitmap bigLineBmp = createBitmap(R.drawable.s_line);
         mOneOClockActor = new BaseActor(bigLineBmp);
         mTwoOClockActor = new BaseActor(bigLineBmp);
         mFourOClockActor = new BaseActor(bigLineBmp);
@@ -93,6 +95,20 @@ public class ActorManager {
         mEightOClockActor = new BaseActor(bigLineBmp);
         mTenOClockActor = new BaseActor(bigLineBmp);
         mElevenOClockActor = new BaseActor(bigLineBmp);
+    }
+
+    private Bitmap createBitmap(int resId) {
+        return BitmapFactory.decodeResource(mResources, resId);
+    }
+
+    private Bitmap rescaleBitmapToFitDimensions(Bitmap srcBitmap) {
+        float viewWidth = mViewCenterPoint.x * 2;
+        float viewHeight = mViewCenterPoint.y * 2;
+        float scaleX = viewWidth / TARGET_SIZE;
+        float scaleY = viewHeight / TARGET_SIZE;
+        int dstWidth = (int) (srcBitmap.getWidth() * scaleX);
+        int dstHeight = (int) (srcBitmap.getHeight() * scaleY);
+        return Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, false);
     }
 
     private void fillTouchableActorsList() {
@@ -144,6 +160,12 @@ public class ActorManager {
     }
 
     public void recalculateActorsMetrics() {
+
+        //rescale all bitmaps
+        for (IActor iActor : mActorsDisplayList) {
+            iActor.setBitmap(rescaleBitmapToFitDimensions(iActor.getBitmap()));
+        }
+
         //Hours arrow
         mHoursArrowActor.setTranslation(-mHoursArrowActor.getBitmap().getWidth() / 2, -(mHoursArrowActor.getBitmap().getHeight() * 0.9f));
         float left = mViewCenterPoint.x + mHoursArrowActor.getTranslation().x;

@@ -11,6 +11,7 @@ import com.yan.custom.views.watch.physics.ICollider;
 public interface IActor {
 
     Bitmap getBitmap();
+    void setBitmap(Bitmap bmp);
 
     float getRotation();
 

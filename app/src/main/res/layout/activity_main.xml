@@ -7,10 +7,10 @@
 
     <com.yan.custom.views.watch.WatchView
         android:id="@+id/watch_view"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="@dimen/watch_view_size"
+        android:layout_height="@dimen/watch_view_size"
         android:layout_centerInParent="true"
-        android:background="#aa0000"/>
+        />
 
     <TextView
         android:id="@+id/textView"

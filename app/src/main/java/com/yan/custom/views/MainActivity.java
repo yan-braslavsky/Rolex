@@ -24,7 +24,6 @@ public class MainActivity extends Activity {
     private int mWindingSoundStreamID;
     private int mTikTakSoundStreamID;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
