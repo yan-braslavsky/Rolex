@@ -72,7 +72,7 @@ public class WatchView extends View {
             @Override
             public void onActorDragBegin(IActor draggedActor) {
                 if (draggedActor == mActorManager.getWindingWheel()) {
-                    //Notify winding wheel listener
+                    //Notify winding_sound wheel listener
                     if (mWindingWheelRotateListener != null) {
                         mWindingWheelRotateListener.onWindingWheelRotationBegin(draggedActor.getRotation());
                     }
@@ -94,7 +94,7 @@ public class WatchView extends View {
             @Override
             public void onActorDragEnd(IActor draggedActor) {
                 if (draggedActor == mActorManager.getWindingWheel()) {
-                    //Notify winding wheel listener
+                    //Notify winding_sound wheel listener
                     if (mWindingWheelRotateListener != null) {
                         mWindingWheelRotateListener.onWindingWheelRotationEnd(draggedActor.getRotation());
                     }
@@ -140,6 +140,7 @@ public class WatchView extends View {
         mWatchTime.setHours(hours % TOTAL_HOURS_ON_WATCH_SCREEN);
         //set rotation of the hour arrow according to the time
         mActorManager.getHoursArrowActor().setRotation(DEGREES_FOR_HOUR * mWatchTime.getHours());
+        invalidate();
     }
 
     public void setMinutes(int minutes) {
@@ -147,6 +148,7 @@ public class WatchView extends View {
         mWatchTime.setMinutes(minutes % TOTAL_MINUTES_ON_WATCH_SCREEN);
         //set rotation of the minutes arrow according to the time
         mActorManager.getMinutesArrowActor().setRotation(DEGREES_FOR_MINUTE * mWatchTime.getMinutes());
+        invalidate();
     }
 
     public void setSeconds(int seconds) {
@@ -154,6 +156,7 @@ public class WatchView extends View {
         mWatchTime.setSeconds(seconds % TOTAL_SECONDS_ON_WATCH_SCREEN);
         //set rotation of the seconds arrow according to the time
         mActorManager.getSecondsArrowActor().setRotation(DEGREES_FOR_SECOND * mWatchTime.getSeconds());
+        invalidate();
     }
 
     public IWatchTime getTime() {
