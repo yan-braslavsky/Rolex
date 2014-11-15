@@ -76,7 +76,7 @@ public class WatchView extends View {
         mActorCanvasRenderer = new ActorCanvasRenderer();
         createActors();
         addActorsToView();
-        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor,mMinutesArrowActor,mSecondsArrowActor, mWindingWheel);
+        mWatchTouchProcessor = new WatchTouchProcessor(mWindingWheel,mSecondsArrowActor,mMinutesArrowActor,mHoursArrowActor);
     }
 
     private void createActors() {

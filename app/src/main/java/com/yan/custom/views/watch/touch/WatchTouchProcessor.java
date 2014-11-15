@@ -20,7 +20,7 @@ public class WatchTouchProcessor {
     private IActor mMinutesArrowActor;
     private IActor mSecondsArrowActor;
 
-    public WatchTouchProcessor(IActor hoursArrowActor, IActor minutesArrowActor, IActor secondsArrowActor, IActor windingWheel) {
+    public WatchTouchProcessor(IActor windingWheel, IActor secondsArrowActor, IActor minutesArrowActor, IActor hoursArrowActor) {
         mHourArrowActor = hoursArrowActor;
         mWindingWheel = windingWheel;
         mViewSize = new PointF(0, 0);
@@ -32,104 +32,61 @@ public class WatchTouchProcessor {
 
 
     public void processTouch(MotionEvent event) {
-        float touchX = event.getX();
-        float touchY = event.getY();
-
-        mCacheTouchPoint.x = touchX;
-        mCacheTouchPoint.y = touchY;
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                onTouchDown(touchX, touchY);
+                onTouchDown(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
-                onTouchMove(touchX, touchY);
+                onTouchMove(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_UP:
-                onTouchUp(touchX, touchY);
+                onTouchUp(event.getX(), event.getY());
                 break;
         }
-
-
     }
 
     private void onTouchUp(float touchX, float touchY) {
-        //TODO:
         mCurrentDraggedActor = null;
     }
 
     private void onTouchMove(float touchX, float touchY) {
-        //TODO:
-
         if (mCurrentDraggedActor != null) {
             float rotation = getAngle(new PointF(touchX, touchY));
             rotation += 90;
             mCurrentDraggedActor.setRotation(rotation);
         }
-
     }
 
     private void onTouchDown(float touchX, float touchY) {
 
         //Winding wheel
-        if (mWindingWheel.getCollider().contains(touchX, touchY)) {
-            mCurrentDraggedActor = mWindingWheel;
-
-            //TODO : extract to concrete handler ?
-            float rotation = getAngle(new PointF(touchX, touchY));
-            rotation += 90;
-            mWindingWheel.setRotation(rotation);
-            return;
-        }
-
+        if (processTouchOnActor(touchX, touchY, mWindingWheel)) return;
 
         //Seconds arrow
-        //rotate back like if the touch point was on the original position of the actor
-        mCacheTouchPoint.x = touchX;
-        mCacheTouchPoint.y = touchY;
-        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mSecondsArrowActor.getRotation());
-
-        if (mSecondsArrowActor.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
-            mCurrentDraggedActor = mSecondsArrowActor;
-
-            //TODO : extract to concrete handler ?
-            float rotation = getAngle(new PointF(touchX, touchY));
-            rotation += 90;
-            mSecondsArrowActor.setRotation(rotation);
-            return;
-        }
+        if (processTouchOnActor(touchX, touchY, mSecondsArrowActor)) return;
 
         //Minute arrow
-        //rotate back like if the touch point was on the original position of the actor
-        mCacheTouchPoint.x = touchX;
-        mCacheTouchPoint.y = touchY;
-        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mMinutesArrowActor.getRotation());
-
-        if (mMinutesArrowActor.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
-            mCurrentDraggedActor = mMinutesArrowActor;
-
-            //TODO : extract to concrete handler ?
-            float rotation = getAngle(new PointF(touchX, touchY));
-            rotation += 90;
-            mMinutesArrowActor.setRotation(rotation);
-            return;
-        }
+        if (processTouchOnActor(touchX, touchY, mMinutesArrowActor)) return;
 
         //Hour arrow
-        //rotate back like if the touch point was on the original position of the actor
+        if (processTouchOnActor(touchX, touchY, mHourArrowActor)) return;
+
+    }
+
+    private boolean processTouchOnActor(float touchX, float touchY, IActor arrow) {
         mCacheTouchPoint.x = touchX;
         mCacheTouchPoint.y = touchY;
-        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -mHourArrowActor.getRotation());
+        //rotate back like if the touch point was on the original position of the actor
+        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -arrow.getRotation());
 
-        if (mHourArrowActor.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
-            mCurrentDraggedActor = mHourArrowActor;
-
-            //TODO : extract to concrete handler ?
+        if (arrow.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
+            mCurrentDraggedActor = arrow;
             float rotation = getAngle(new PointF(touchX, touchY));
             rotation += 90;
-            mHourArrowActor.setRotation(rotation);
-            return;
+            arrow.setRotation(rotation);
+            return true;
         }
+        return false;
     }
 
     public float getAngle(PointF screenPoint) {
@@ -137,7 +94,8 @@ public class WatchTouchProcessor {
         double dy = -(screenPoint.y - (mViewSize.y / 2));
         double inRads = Math.atan2(dy, dx);
         inRads = (inRads < 0) ? Math.abs(inRads) : (2 * Math.PI - inRads);
-        return (float) (Math.toDegrees(inRads));
+        float result = (float) (Math.toDegrees(inRads));
+        return result;
     }
 
     public void setViewSize(int w, int h) {
@@ -146,6 +104,4 @@ public class WatchTouchProcessor {
         mViewOrigin.x = w / 2;
         mViewOrigin.y = h / 2;
     }
-
-
 }
