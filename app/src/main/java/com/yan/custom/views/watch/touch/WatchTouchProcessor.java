@@ -13,11 +13,18 @@ import java.util.List;
  */
 public class WatchTouchProcessor {
 
+    public interface IActorDragListener {
+        void onActorDragBegin(IActor draggedActor);
+        void onActorDrag(IActor draggedActor);
+        void onActorDragEnd(IActor draggedActor);
+    }
+
     private IActor mCurrentDraggedActor;
     private List<IActor> mTouchableActors;
     private PointF mViewSize;
     private PointF mCacheTouchPoint;
     private PointF mViewOrigin;
+    private IActorDragListener mActorDragListener;
 
     public WatchTouchProcessor(List<IActor> touchableActors) {
         mTouchableActors = touchableActors;
@@ -41,11 +48,17 @@ public class WatchTouchProcessor {
     }
 
     private void onTouchUp(float touchX, float touchY) {
+
+        //notify listener of end drag
+        if (mActorDragListener != null) {
+            mActorDragListener.onActorDragEnd(mCurrentDraggedActor);
+        }
         mCurrentDraggedActor = null;
     }
 
     private void onTouchMove(float touchX, float touchY) {
         if (mCurrentDraggedActor != null) {
+            mActorDragListener.onActorDrag(mCurrentDraggedActor);
             float rotation = getAngle(new PointF(touchX, touchY));
             rotation += 90;
             mCurrentDraggedActor.setRotation(rotation);
@@ -58,17 +71,23 @@ public class WatchTouchProcessor {
         }
     }
 
-    private boolean processTouchOnActor(float touchX, float touchY, IActor arrow) {
+    private boolean processTouchOnActor(float touchX, float touchY, IActor actor) {
         mCacheTouchPoint.x = touchX;
         mCacheTouchPoint.y = touchY;
         //rotate back like if the touch point was on the original position of the actor
-        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -arrow.getRotation());
+        WatchMathUtils.rotatePointAroundOrigin(mCacheTouchPoint, mViewOrigin, -actor.getRotation());
 
-        if (arrow.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
-            mCurrentDraggedActor = arrow;
+        if (actor.getCollider().contains(mCacheTouchPoint.x, mCacheTouchPoint.y)) {
+            mCurrentDraggedActor = actor;
+
+            //notify listener of begin drag
+            if (mActorDragListener != null) {
+                mActorDragListener.onActorDragBegin(actor);
+            }
+
             float rotation = getAngle(new PointF(touchX, touchY));
             rotation += 90;
-            arrow.setRotation(rotation);
+            actor.setRotation(rotation);
             return true;
         }
         return false;
@@ -88,5 +107,9 @@ public class WatchTouchProcessor {
         mViewSize.y = h;
         mViewOrigin.x = w / 2;
         mViewOrigin.y = h / 2;
+    }
+
+    public void setActorDragListener(IActorDragListener dragListener) {
+        mActorDragListener = dragListener;
     }
 }

@@ -9,6 +9,7 @@ import com.yan.custom.views.watch.physics.ICollider;
  * Created by Yan-Home on 11/14/2014.
  */
 public interface IActor {
+
     Bitmap getBitmap();
 
     float getRotation();

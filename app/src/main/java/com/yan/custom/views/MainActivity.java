@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.yan.custom.views.watch.WatchView;
+import com.yan.custom.views.watch.time.WatchTime;
 
 
 public class MainActivity extends Activity {
@@ -12,6 +16,34 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //inflate views
+        final WatchView watchView = (WatchView) findViewById(R.id.watch_view);
+        final TextView textView = (TextView) findViewById(R.id.textView);
+
+        //set time change listener
+        watchView.setWatchTimeChangeListener(new WatchTime.WatchTimeChangeListener() {
+            @Override
+            public void onTimeSet(int hours, int minutes, int seconds) {
+                textView.setText("Time  " + hours + ":" + minutes + ":" + seconds);
+            }
+        });
+
+        //set time
+        watchView.setTime(2, 15, 30);
+
+        watchView.setWindingWheelRotateListener(new WatchView.WindingWheelRotateListener() {
+            @Override
+            public void onWindingWheelRotationBegin(float currentRotationAngle) {
+                //TODO : remember the angle
+            }
+
+            @Override
+            public void onWindingWheelRotationEnd(float currentRotationAngle) {
+                //TODO : depending on rotation angle add ticking time
+            }
+        });
+
     }
 
 

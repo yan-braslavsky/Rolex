@@ -19,18 +19,20 @@ import java.util.List;
  */
 public class ActorManager {
 
+    private List<IActor> mTouchableActors;
+    private PointF mViewCenterPoint;
     private ArrayList<IActor> mActorsDisplayList;
     private Resources mResources;
 
     //Background actors
     private IActor mWatchStrapActor;
-    private IActor mWindingWheel;
     private IActor mWatchScreenActor;
 
-    //Arrows actors
+    //touchable actors
     private IActor mHoursArrowActor;
     private IActor mMinutesArrowActor;
     private IActor mSecondsArrowActor;
+    private IActor mWindingWheel;
 
     //Big time actors
     private IActor mTwelveOClockActor;
@@ -47,8 +49,7 @@ public class ActorManager {
     private IActor mEightOClockActor;
     private IActor mTenOClockActor;
     private IActor mElevenOClockActor;
-    private List<IActor> mTouchableActors;
-    private PointF mViewCenterPoint;
+
 
     public ActorManager(Resources resources) {
         mActorsDisplayList = new ArrayList<IActor>();
@@ -246,5 +247,21 @@ public class ActorManager {
 
     public List<IActor> getTouchableActors() {
         return mTouchableActors;
+    }
+
+    public IActor getHoursArrowActor() {
+        return mHoursArrowActor;
+    }
+
+    public IActor getMinutesArrowActor() {
+        return mMinutesArrowActor;
+    }
+
+    public IActor getSecondsArrowActor() {
+        return mSecondsArrowActor;
+    }
+
+    public IActor getWindingWheel() {
+        return mWindingWheel;
     }
 }
