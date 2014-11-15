@@ -1,6 +1,7 @@
 package com.yan.custom.views.watch;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PointF;
@@ -75,7 +76,7 @@ public class WatchView extends View {
         mActorCanvasRenderer = new ActorCanvasRenderer();
         createActors();
         addActorsToView();
-        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor, mWindingWheel);
+        mWatchTouchProcessor = new WatchTouchProcessor(mHoursArrowActor,mMinutesArrowActor,mSecondsArrowActor, mWindingWheel);
     }
 
     private void createActors() {
@@ -91,20 +92,22 @@ public class WatchView extends View {
 
         //time
         //big times
-        mTwelveOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
-        mThreeOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
-        mSixOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
-        mNineOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.b_line));
+        Bitmap smallLineBmp = BitmapFactory.decodeResource(getResources(), R.drawable.b_line);
+        mTwelveOClockActor = new BaseActor(smallLineBmp);
+        mThreeOClockActor = new BaseActor(smallLineBmp);
+        mSixOClockActor = new BaseActor(smallLineBmp);
+        mNineOClockActor = new BaseActor(smallLineBmp);
 
         //small times
-        mOneOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mTwoOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mFourOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mFiveOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mSevenOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mEightOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mTenOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
-        mElevenOClockActor = new BaseActor(BitmapFactory.decodeResource(getResources(), R.drawable.s_line));
+        Bitmap bigLineBmp = BitmapFactory.decodeResource(getResources(), R.drawable.s_line);
+        mOneOClockActor = new BaseActor(bigLineBmp);
+        mTwoOClockActor = new BaseActor(bigLineBmp);
+        mFourOClockActor = new BaseActor(bigLineBmp);
+        mFiveOClockActor = new BaseActor(bigLineBmp);
+        mSevenOClockActor = new BaseActor(bigLineBmp);
+        mEightOClockActor = new BaseActor(bigLineBmp);
+        mTenOClockActor = new BaseActor(bigLineBmp);
+        mElevenOClockActor = new BaseActor(bigLineBmp);
     }
 
     private void addActorsToView() {
@@ -152,9 +155,16 @@ public class WatchView extends View {
 
         //Minutes arrow
         mMinutesArrowActor.setTranslation(-mMinutesArrowActor.getBitmap().getWidth() / 2, -(mMinutesArrowActor.getBitmap().getHeight() * 0.9f));
+        left = mViewCenterPoint.x + mMinutesArrowActor.getTranslation().x;
+        top = mViewCenterPoint.y + mMinutesArrowActor.getTranslation().y;
+        mMinutesArrowActor.setCollider(new Box2DCollider(left, top, left + mMinutesArrowActor.getBitmap().getWidth(), top + mMinutesArrowActor.getBitmap().getHeight()));
 
         //Seconds arrow
         mSecondsArrowActor.setTranslation(-mSecondsArrowActor.getBitmap().getWidth() / 2, -(mSecondsArrowActor.getBitmap().getHeight() * 0.9f));
+        left = mViewCenterPoint.x + mSecondsArrowActor.getTranslation().x;
+        top = mViewCenterPoint.y + mSecondsArrowActor.getTranslation().y;
+        mSecondsArrowActor.setCollider(new Box2DCollider(left, top, left + mSecondsArrowActor.getBitmap().getWidth(), top + mSecondsArrowActor.getBitmap().getHeight()));
+
 
         //strap
         mWatchStrapActor.setTranslation(-mWatchStrapActor.getBitmap().getWidth() / 2, -mWatchStrapActor.getBitmap().getHeight() / 2);
