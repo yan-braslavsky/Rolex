@@ -20,4 +20,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
+    <Button
+        android:id="@+id/animate_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/scale_down"
+        android:onClick="animate"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
 </RelativeLayout>

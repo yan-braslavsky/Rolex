@@ -1,11 +1,15 @@
 package com.yan.custom.views;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.yan.custom.views.watch.WatchView;
@@ -23,6 +27,7 @@ public class MainActivity extends Activity {
     private SoundPool mSoundPool;
     private int mWindingSoundStreamID;
     private int mTikTakSoundStreamID;
+    private boolean mScaled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +89,37 @@ public class MainActivity extends Activity {
 
                 int secondsToAdd = (int) (Math.abs(currentRotationAngle - _previousAngle) * SECONDS_TO_ADD_FOR_ONE_ROTATION_DEGREE);
                 mTimeTickingTask = new TimeTickingTask(mWatchView, secondsToAdd);
-                mTimeTickingTask.execute();
+
+                //we want to allow parallel execution
+                mTimeTickingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
+
+    }
+
+    public void animate(View view) {
+
+
+
+        Button btn = (Button) view;
+        AnimatorSet set = new AnimatorSet();
+        if(mScaled){
+            //scale up
+            ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(mWatchView, "scaleX", 0.5f, 1f);
+            ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(mWatchView, "scaleY", 0.5f, 1f);
+            set.play(scaleXUp).with(scaleYUp);
+            btn.setText(getString(R.string.scale_down));
+        }else{
+            //scale down
+            ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(mWatchView, "scaleX", 1f, 0.5f);
+            ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(mWatchView, "scaleY", 1f, 0.5f);
+            set.play(scaleXDown).with(scaleYDown);
+            btn.setText(getString(R.string.scale_up));
+        }
+
+        mScaled = !mScaled;
+        set.setDuration(1000);
+        set.start();
 
     }
 
@@ -108,7 +141,7 @@ public class MainActivity extends Activity {
         mSoundPool.stop(mTikTakSoundStreamID);
     }
 
-    private class TimeTickingTask extends AsyncTask<Void, Void, Void> {
+    private  class TimeTickingTask extends AsyncTask<Void, Void, Void> {
 
         private int _tickingDurationInSeconds;
         private WatchView _watchView;
