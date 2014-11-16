@@ -24,7 +24,7 @@ In this example you can :
 
 ### Limitations
  * As I wanted to keep the view multi purpose , it doesn't contain too much logic. So if you want to make it ticking or arrows follow one another , you should be able to do so using the provided listeners.Like I did in the example.
- * Currently watch view should have a fixed aspect ratio of "1" (width = height) , otherwise visual distortions will occur.When Watch-View is has aspect ratio other than "1" , I consider it a special case.I didn't want to handle special cases , because this handling can depend on your specific needs.You can handle it yourself :)
+ * Currently watch view should have a fixed aspect ratio of "1" (width = height) , otherwise visual distortions will occur.When Watch-View has an aspect ratio other than "1" , I consider it a special case.I didn't want to handle special cases , because this handling can depend on your specific needs.You can handle it yourself :)
 
 ### Performance
 I didn't run any stress tests on the watch view , but it shouldn't be very performance consuming. I tried to keep the code readable and decoupled rather than optimized for the best performance. So you are sure to find some areas to improve.With that being said , it still runs pretty good :)
