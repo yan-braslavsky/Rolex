@@ -16,11 +16,19 @@ import java.util.List;
 
 /**
  * Created by Yan on 11/15/2014.
+ * <p/>
+ * This manager creates and manages actors that
+ * are drawn in {@link com.yan.custom.views.watch.WatchView
  */
 public class ActorManager {
 
+    /**
+     * Assets for this custom view are created targeting
+     * 800x800 px area.
+     */
     private static int TARGET_SIZE = 800;
 
+    //list of all actors that will react on touch events
     private List<IActor> mTouchableActors;
     private PointF mViewCenterPoint;
     private ArrayList<IActor> mActorsDisplayList;
@@ -67,9 +75,12 @@ public class ActorManager {
 
     private void createActors() {
 
+        //background actors
         mWatchStrapActor = new BaseActor(createBitmap(R.drawable.strap));
-        mWindingWheel = new BaseActor(createBitmap(R.drawable.wheel));
         mWatchScreenActor = new BaseActor(createBitmap(R.drawable.screen));
+
+        //winding wheel
+        mWindingWheel = new BaseActor(createBitmap(R.drawable.wheel));
 
         //arrows
         mHoursArrowActor = new BaseActor(createBitmap(R.drawable.hour));
@@ -101,6 +112,13 @@ public class ActorManager {
         return BitmapFactory.decodeResource(mResources, resId);
     }
 
+    /**
+     * When view width and size are not match the target size
+     * the bitmap should be rescaled.
+     *
+     * @param srcBitmap bitmap to rescale
+     * @return new rescaled instance of a bitmap
+     */
     private Bitmap rescaleBitmapToFitDimensions(Bitmap srcBitmap) {
         float viewWidth = mViewCenterPoint.x * 2;
         float viewHeight = mViewCenterPoint.y * 2;
@@ -111,6 +129,10 @@ public class ActorManager {
         return Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, false);
     }
 
+    /**
+     * Here we are putting all the actors that will
+     * react on touches
+     */
     private void fillTouchableActorsList() {
         mTouchableActors.add(mWindingWheel);
         mTouchableActors.add(mSecondsArrowActor);
@@ -155,10 +177,17 @@ public class ActorManager {
     }
 
     public void setViewSize(float w, float h) {
+        //cache center point
         mViewCenterPoint.x = w / 2;
         mViewCenterPoint.y = h / 2;
     }
 
+    /**
+     * This method recalculates dimensions of all actors
+     * including their colliders and bitmap.
+     * This method is pretty heavy on the performance,
+     * try not to call it very often.
+     */
     public void recalculateActorsMetrics() {
 
         //rescale all bitmaps
@@ -166,6 +195,33 @@ public class ActorManager {
             iActor.setBitmap(rescaleBitmapToFitDimensions(iActor.getBitmap()));
         }
 
+        //watch strap
+        mWatchStrapActor.setTranslation(-mWatchStrapActor.getBitmap().getWidth() / 2, -mWatchStrapActor.getBitmap().getHeight() / 2);
+
+        //watch screen
+        mWatchScreenActor.setTranslation(-mWatchScreenActor.getBitmap().getWidth() / 2, -mWatchScreenActor.getBitmap().getHeight() / 2);
+
+        //wheel
+        recalculateWindingWheelMetrics();
+
+        //arrows
+        recalculateArrowsMetrics();
+
+        //big time lines
+        recalculateBigTimeLines();
+
+        //small time lines
+        recalculateSmallTimeLines();
+    }
+
+    private void recalculateWindingWheelMetrics() {
+        mWindingWheel.setTranslation(-mWindingWheel.getBitmap().getWidth() / 2, -mWindingWheel.getBitmap().getHeight() / 2);
+        float ringWidth = (mViewCenterPoint.x * 2) * 0.1f;
+        float windingWheelHalfWidth = mWindingWheel.getBitmap().getWidth() / 2;
+        mWindingWheel.setCollider(new Ring2DCollider(mViewCenterPoint, windingWheelHalfWidth - ringWidth, windingWheelHalfWidth));
+    }
+
+    private void recalculateArrowsMetrics() {
         //Hours arrow
         mHoursArrowActor.setTranslation(-mHoursArrowActor.getBitmap().getWidth() / 2, -(mHoursArrowActor.getBitmap().getHeight() * 0.9f));
         float left = mViewCenterPoint.x + mHoursArrowActor.getTranslation().x;
@@ -183,25 +239,9 @@ public class ActorManager {
         left = mViewCenterPoint.x + mSecondsArrowActor.getTranslation().x;
         top = mViewCenterPoint.y + mSecondsArrowActor.getTranslation().y;
         mSecondsArrowActor.setCollider(new Box2DCollider(left, top, left + mSecondsArrowActor.getBitmap().getWidth(), top + mSecondsArrowActor.getBitmap().getHeight()));
-
-
-        //strap
-        mWatchStrapActor.setTranslation(-mWatchStrapActor.getBitmap().getWidth() / 2, -mWatchStrapActor.getBitmap().getHeight() / 2);
-
-        //wheel
-        mWindingWheel.setTranslation(-mWindingWheel.getBitmap().getWidth() / 2, -mWindingWheel.getBitmap().getHeight() / 2);
-        float ringWidth = (mViewCenterPoint.x * 2) * 0.1f;
-        float windingWheelHalfWidth = mWindingWheel.getBitmap().getWidth() / 2;
-        mWindingWheel.setCollider(new Ring2DCollider(mViewCenterPoint, windingWheelHalfWidth - ringWidth, windingWheelHalfWidth /*+ ringWidth*/));
-
-        //screen
-        mWatchScreenActor.setTranslation(-mWatchScreenActor.getBitmap().getWidth() / 2, -mWatchScreenActor.getBitmap().getHeight() / 2);
-
-        initBigTimeMarkers();
-        initSmallTimeMarkers();
     }
 
-    private void initSmallTimeMarkers() {
+    private void recalculateSmallTimeLines() {
         //big time markers
         float smallHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - (mOneOClockActor.getBitmap().getHeight() * 1.2f));
         float smallHourMarkerXTranslation = -mOneOClockActor.getBitmap().getWidth() / 2f;
@@ -241,7 +281,7 @@ public class ActorManager {
 
     }
 
-    private void initBigTimeMarkers() {
+    private void recalculateBigTimeLines() {
         //big time markers
         float bigHourMarkerYTranslation = -(mWatchScreenActor.getBitmap().getHeight() / 2f - (mSixOClockActor.getBitmap().getHeight() * 1.2f) / 2f);
         float bigHourMarkerXTranslation = -mSixOClockActor.getBitmap().getWidth() / 2f;
