@@ -15,7 +15,7 @@ import com.yan.custom.views.watch.time.WatchTime;
 import com.yan.custom.views.watch.touch.WatchTouchProcessor;
 
 /**
- * Created by Yan-Home on 11/14/2014.
+ * Created by Yan on 11/14/2014.
  */
 public class WatchView extends View {
 

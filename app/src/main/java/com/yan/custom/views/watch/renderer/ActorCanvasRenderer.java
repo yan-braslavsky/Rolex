@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import com.yan.custom.views.watch.actors.IActor;
 
 /**
- * Created by Yan-Home on 11/14/2014.
+ * Created by Yan on 11/14/2014.
  */
 public class ActorCanvasRenderer implements IActorCanvasRenderer {
 

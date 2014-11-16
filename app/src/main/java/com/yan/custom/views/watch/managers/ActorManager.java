@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Yan-Home on 11/15/2014.
+ * Created by Yan on 11/15/2014.
  */
 public class ActorManager {
 

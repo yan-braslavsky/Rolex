@@ -9,7 +9,7 @@ import com.yan.custom.views.watch.math.WatchMathUtils;
 import java.util.List;
 
 /**
- * Created by Yan-Home on 11/14/2014.
+ * Created by Yan on 11/14/2014.
  */
 public class WatchTouchProcessor {
 

@@ -6,7 +6,7 @@ import android.graphics.PointF;
 import com.yan.custom.views.watch.physics.ICollider;
 
 /**
- * Created by Yan-Home on 11/14/2014.
+ * Created by Yan on 11/14/2014.
  */
 public interface IActor {
 

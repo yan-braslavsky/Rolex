@@ -3,7 +3,7 @@ package com.yan.custom.views.watch.physics;
 import android.graphics.RectF;
 
 /**
- * Created by Yan-Home on 11/14/2014.
+ * Created by Yan on 11/14/2014.
  */
 public class Box2DCollider implements ICollider {
 

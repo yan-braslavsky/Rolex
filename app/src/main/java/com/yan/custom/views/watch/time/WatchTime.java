@@ -1,7 +1,7 @@
 package com.yan.custom.views.watch.time;
 
 /**
- * Created by Yan-Home on 11/15/2014.
+ * Created by Yan on 11/15/2014.
  */
 public class WatchTime implements IWatchTime {
 
