@@ -7,6 +7,8 @@ import com.yan.custom.views.watch.physics.ICollider;
 
 /**
  * Created by Yan on 11/14/2014.
+ *
+ * The base implementer of an {@link com.yan.custom.views.watch.actors.IActor}
  */
 public class BaseActor implements IActor {
 

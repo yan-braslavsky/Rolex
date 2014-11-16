@@ -2,9 +2,15 @@ package com.yan.custom.views.watch.time;
 
 /**
  * Created by Yan on 11/15/2014.
+ * <p/>
+ * Manages a time.
  */
 public class WatchTime implements IWatchTime {
 
+    /**
+     * Will be called every time the {@link WatchTime}
+     * is changed.
+     */
     public interface WatchTimeChangeListener {
         void onTimeSet(int hours, int minutes, int seconds);
     }

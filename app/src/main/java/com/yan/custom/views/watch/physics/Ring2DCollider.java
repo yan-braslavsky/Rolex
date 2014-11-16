@@ -4,6 +4,8 @@ import android.graphics.PointF;
 
 /**
  * Created by Yan on 11/14/2014.
+ * Implementer of {@link com.yan.custom.views.watch.physics.ICollider}
+ * that is represented as a ring area that will be checked for collisions.
  */
 public class Ring2DCollider implements ICollider {
 

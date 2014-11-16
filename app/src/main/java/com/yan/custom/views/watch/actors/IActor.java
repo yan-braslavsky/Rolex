@@ -7,22 +7,24 @@ import com.yan.custom.views.watch.physics.ICollider;
 
 /**
  * Created by Yan on 11/14/2014.
+ * This interface defines a single actor
+ * that will be drawn in the {@link com.yan.custom.views.watch.WatchView}.
  */
 public interface IActor {
 
-    Bitmap getBitmap();
-    void setBitmap(Bitmap bmp);
-
-    float getRotation();
-
     void setTranslation(float x, float y);
-
-    PointF getTranslation();
-
-    void setRotation(float rotation);
-
-    ICollider getCollider();
 
     void setCollider(ICollider collider);
 
+    void setBitmap(Bitmap bmp);
+
+    void setRotation(float rotation);
+
+    float getRotation();
+
+    PointF getTranslation();
+
+    ICollider getCollider();
+
+    Bitmap getBitmap();
 }
