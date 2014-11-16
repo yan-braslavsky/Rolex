@@ -1,7 +1,7 @@
 Watch-View
 ==========
 
-This is an implementation for another android custom view.The view is a simple analog watch. The code can help you understand how a custom view can be created.Or you can jsut use this custom view in your project as it is or with some adaptations.
+This is an implementation for another android custom view.The view is a simple analog watch. The code can help you understand how a custom view can be created.Or you can just use this custom view in your project as it is or with some adaptations.
 
 ### Purpose of this project
 Here I want to show you how a relatively complex custom view can be implemented.
@@ -14,8 +14,8 @@ If you find the Watch-View cool and want to appreciate my work , just post somet
 In this example you can :
 * Move each arrow with a finger to set it to desired position.
 * Rotate a winding wheel to make the watch ticking.
-* Click on the scale button to see how WatchView us scaled down.
-* While WatchView is scaled you still can touch and manipulated as expected.
+* Click on the scale button to see the WatchView scaled down.
+* While WatchView is scaled you still can touch and manipulate it as expected.
 
 
 ### Possible real application usages.
@@ -24,7 +24,7 @@ In this example you can :
 
 ### Limitations
  * As I wanted to keep the view multi purpose , it doesn't contain too much logic. So if you want to make it ticking or arrows follow one another , you should be able to do so using the provided listeners.Like I did in the example.
- * Currently watch view should have a fixed aspect ration of "1" (width = height) , otherwise visual distortions will occur.I didn't want to handle special cases , because this handling can depend on your specific needs.You can handle it yourself :)
+ * Currently watch view should have a fixed aspect ratio of "1" (width = height) , otherwise visual distortions will occur.When Watch-View is has aspect ratio other than "1" , I consider it a special case.I didn't want to handle special cases , because this handling can depend on your specific needs.You can handle it yourself :)
 
 ### Performance
 I didn't run any stress tests on the watch view , but it shouldn't be very performance consuming. I tried to keep the code readable and decoupled rather than optimized for the best performance. So you are sure to find some areas to improve.With that being said , it still runs pretty good :)
