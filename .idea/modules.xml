@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Watch-View.iml" filepath="$PROJECT_DIR$/Watch-View.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WatchView2.iml" filepath="$PROJECT_DIR$/WatchView2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
-
