@@ -1,7 +1,7 @@
-Watch-View
+Rolex
 ==========
 
-This is an implementation of another android custom view.The view is a simple analog watch. The code can help you understand how a custom view can be created.Or you can just use this custom view in your project as it is or with some adaptations.
+This is an implementation of an android custom view.The view is a simple analog watch. The code can help you understand how a custom view can be created.Or you can just use this custom view in your project as it is or with some adaptations.
 
 ### Purpose of this project
 Here I want to show you how a relatively complex custom view can be implemented.
